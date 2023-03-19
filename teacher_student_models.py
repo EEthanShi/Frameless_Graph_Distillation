@@ -93,7 +93,7 @@ def ChebyshevApprox(f, n):  # assuming f : [0, pi] -> R
 
 
 
-""" not sure which function to use, by default using get operator not operator 2"""
+""" by default using get operator not operator 2"""
 def get_operator(L, DFilters, n, s, J, Lev):
     r = len(DFilters)
     c = [None] * r
@@ -116,7 +116,7 @@ def get_operator(L, DFilters, n, s, J, Lev):
         FD1 = d[0, l - 1]
 
     return d
-"""modified version for Prof Junbin Gao"""
+
 def get_operator2(L, DFilters, n, s, J, Lev):
     r = len(DFilters)
     c = [None] * r
@@ -481,7 +481,7 @@ class FMLPO(nn.Module):
        
         
         return  y_reconstruct
-    '''this is used when l>2, as we need maintain the y_reconstruct by using nn.linear(hidden_dim, hidden_dim)==>second ecoding'''    
+       
     def intermediate_node_embedding (self, low_pass_d,high_pass_d, y_reconstruct):  
   
         H_lp = self.mlp_lowpass(low_pass_d)  
@@ -493,8 +493,8 @@ class FMLPO(nn.Module):
         
         H_0j = torch.cat((H_lp, y_reconstruct), dim=1)
         H_rj = torch.cat((H_hp, y_reconstruct), dim=1)
-        high_d_alpha_0j = self.atten(H_0j).sigmoid()  # generate low pass alpha in d_0 dimension 
-        high_d_alpha_rj = self.atten(H_rj).sigmoid()  # generate hihg pass alpha in d_0 dimension 
+        high_d_alpha_0j = self.atten(H_0j).sigmoid()  
+        high_d_alpha_rj = self.atten(H_rj).sigmoid()  
         high_y_0j = H_lp * high_d_alpha_0j.view(-1, 1) + y_reconstruct * (1 - high_d_alpha_0j.view(-1, 1))
         high_y_rj = H_hp * high_d_alpha_rj.view(-1, 1) + y_reconstruct * (1 - high_d_alpha_rj.view(-1, 1))
         y_reconstruct = high_y_0j+high_y_rj
@@ -506,7 +506,7 @@ class FMLPO(nn.Module):
     
     def output_layer_imtation(self,low_pass_d_square,high_pass_d_square, y_reconstruct):
        
-        HX_second_layer = self.mlp_second_econding(y_reconstruct) # optional when layer <2: encode the first layer output. 
+        HX_second_layer = self.mlp_second_econding(y_reconstruct) 
         
         HX_second_layer = self.dropout(HX_second_layer).relu()
         
@@ -542,11 +542,11 @@ class FMLPO(nn.Module):
         return y
         
         
-    def forward(self,low_pass_knowledge,high_pass_knowledge,X): # we can not take list in here, seems i must do the dumb way
+    def forward(self,low_pass_knowledge,high_pass_knowledge,X): # low pass and high pass knowledges are list of framelet filtered adjacency information
         y_reconstruct = self.hidden_layer_imitation(low_pass_knowledge[0],high_pass_knowledge[0], X)
         if self.layers  ==3: 
             y_reconstruct = self.intermediate_node_embedding(low_pass_knowledge[1],high_pass_knowledge[1], y_reconstruct)
-        if self.layers >3: 
+        if self.layers >3: # we only need layer =3 or 4
             y_reconstruct = self.intermediate_node_embedding(low_pass_knowledge[1],high_pass_knowledge[1], y_reconstruct)
             y_reconstruct = self.intermediate_node_embedding(low_pass_knowledge[2],high_pass_knowledge[2], y_reconstruct)
         y = self.output_layer_imtation(low_pass_knowledge[-1],high_pass_knowledge[-1],y_reconstruct)
