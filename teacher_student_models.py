@@ -598,7 +598,7 @@ class FMLPS(nn.Module):
         
         return y
     
-    def forward(self,low_pass_knowledge,high_pass_knowledge,X):
+    def forward(self,low_pass_knowledge,high_pass_knowledge,X): # low pass and high pass knowledges are list of framelet filtered adjacency information
         y = self.simplified_imitation(low_pass_knowledge[-1], high_pass_knowledge[-1], X) # directly apply the highest power to X
         return y  
         
