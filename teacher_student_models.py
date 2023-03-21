@@ -389,16 +389,16 @@ class FMLPO(nn.Module):
 
 #------------------------------------------FMLPS-----------------------------------
 class FMLPS(nn.Module):  
-    def __init__(self, in_channels, hidden_channels, out_channels, num_nodes, num_layer=1,
+    def __init__(self, in_channels, hidden_channels, out_channels, num_nodes, MLP_layer=1,
                  dropout=.5, norm_type='none'):
         super().__init__()    
         self.mlp_lowpass = nn.Linear(num_nodes, hidden_channels)
         self.mlp_highpass = nn.Linear(num_nodes, hidden_channels)
         self.mlpX = nn.Linear(in_channels, hidden_channels)
         self.atten = nn.Linear(hidden_channels * 2, 1)
-        self.classifier_lowpass = MLP(hidden_channels, hidden_channels, out_channels,num_layer, dropout, norm_type=norm_type)
-        self.classifier_highpass = MLP(hidden_channels, hidden_channels, out_channels,num_layer, dropout, norm_type=norm_type)
-        self.classifierX = MLP(hidden_channels, hidden_channels, out_channels, num_layer,dropout, norm_type=norm_type)
+        self.classifier_lowpass = MLP(hidden_channels, hidden_channels, out_channels,MLP_layer, dropout, norm_type=norm_type)
+        self.classifier_highpass = MLP(hidden_channels, hidden_channels, out_channels,MLP_layer, dropout, norm_type=norm_type)
+        self.classifierX = MLP(hidden_channels, hidden_channels, out_channels, MLP_layer,dropout, norm_type=norm_type)
         self.dropout = nn.Dropout(dropout)
         
         
