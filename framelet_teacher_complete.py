@@ -150,7 +150,8 @@ if args.Chebyshev:
         J = np.log(lambda_max / np.pi) / np.log(scale)
         d = get_operator2(L, DFilters, n, scale, J, Lev)
     else:
-        J = np.log(lambda_max / np.pi) / np.log(scale) + Lev - 1
+        #J = np.log(lambda_max / np.pi) / np.log(scale) + Lev - 1
+        J=1   # set J =1 for only one high and low pass domain.
         d = get_operator(L, DFilters, n, scale, J, Lev)
     # enhance sparseness of the matrix operators (optional)
     # d[np.abs(d) < 0.001] = 0.0
