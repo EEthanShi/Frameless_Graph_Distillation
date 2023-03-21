@@ -123,7 +123,7 @@ def get_args():
     parser.add_argument('--epsilon', type=int, default=0, help='epsilon for energy pertubation.')
     parser.add_argument('--Lev', type=int, default=1,
                         help='level of transform (default: 2)')
-    parser.add_argument('--scale', type=float, default=2, 
+    parser.add_argument('--scale', type=float, default=1, 
                         help='dilation scale > 1 (default: 2)')
     parser.add_argument('--n', type=int, default=2,
                         help='n - 1 = Degree of Chebyshev Polynomial Approximation (default: n = 2)')
