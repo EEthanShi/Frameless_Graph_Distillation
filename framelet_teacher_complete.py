@@ -143,15 +143,15 @@ DFilters = getFilters(FrameType)
 Lev = args.Lev  # level of transform
 scale = args.scale  # dilation scale
 n = args.n
-r = len(DFilters)
+r = len(DFilters) # for haar filter, this generates two domains.
     # get matrix operators
 if args.Chebyshev:
     if (FrameType == 'Entropy' or FrameType == 'Sigmoid'):
         J = np.log(lambda_max / np.pi) / np.log(scale)
         d = get_operator2(L, DFilters, n, scale, J, Lev)
     else:
-        #J = np.log(lambda_max / np.pi) / np.log(scale) + Lev - 1
-        J=1   # set J =1 for only one high and low pass domain.
+        J = np.log(lambda_max / np.pi) / np.log(scale) + Lev - 1
+        
         d = get_operator(L, DFilters, n, scale, J, Lev)
     # enhance sparseness of the matrix operators (optional)
     # d[np.abs(d) < 0.001] = 0.0
